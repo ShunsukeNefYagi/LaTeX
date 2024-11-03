@@ -1,0 +1,653 @@
+% \documentclass[dvipdfmx, 11pt]{beamer}
+\documentclass[aspectratio=169, dvipdfmx, 11pt,uplatex]{beamer} % aspectratio=43, 149, 169
+\usepackage{here, amsmath, latexsym, amssymb, bm, ascmac, mathtools, multicol, tcolorbox, subfig}
+\usepackage{physics}
+\usepackage{color}
+%デザインの選択(省略可)
+\usetheme{Luebeck}
+%カラーテーマの選択(省略可)
+\usecolortheme{orchid}
+%フォントテーマの選択(省略可)
+\usefonttheme{professionalfonts}
+%フレーム内のテーマの選択(省略可)
+\useinnertheme{circles}
+%フレーム外側のテーマの選択(省略可)
+\useoutertheme{infolines}
+%しおりの文字化け解消
+\usepackage{atbegshi}
+\ifnum 42146=\euc"A4A2
+\AtBeginShipoutFirst{\special{pdf:tounicode EUC-UCS2}}
+\else
+\AtBeginShipoutFirst{\special{pdf:tounicode 90ms-RKSJ-UCS2}}
+\fi
+%ナビゲーションバー非表示
+\setbeamertemplate{navigation symbols}{}
+%既定をゴシック体に
+\renewcommand{\kanjifamilydefault}{\gtdefault}
+%タイトル色
+\setbeamercolor{title}{fg=structure, bg=}
+%フレームタイトル色
+\setbeamercolor{frametitle}{fg=structure, bg=}
+%スライド番号のみ表示
+%\setbeamertemplate{footline}[frame number]
+%itemize
+\setbeamertemplate{itemize item}{\small\raise0.5pt\hbox{$\bullet$}}
+\setbeamertemplate{itemize subitem}{\tiny\raise1.5pt\hbox{$\blacktriangleright$}}
+\setbeamertemplate{itemize subsubitem}{\tiny\raise1.5pt\hbox{$\bigstar$}}
+% color
+\newcommand{\red}[1]{\textcolor{red}{#1}}
+\newcommand{\green}[1]{\textcolor{green!40!black}{#1}}
+\newcommand{\blue}[1]{\textcolor{blue!80!black}{#1}}
+
+\title[Stochastic Thermodynamics]{Stochastic Thermodynamics}
+\subtitle{I. Basic Framework}
+\author[八木俊輔]{八木俊輔}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\begin{frame}{目次}
+    \tableofcontents
+\end{frame}
+
+\section{自己紹介}
+\begin{frame}{目次}
+  \tableofcontents[currentsection]
+\end{frame}
+
+\begin{frame}{自己紹介}
+  \begin{description}
+    \item[名前] 八木俊輔
+    \item[所属] 理学部化学科３年
+  \end{description}
+\end{frame}
+
+\section{Reference}
+
+\begin{frame}{目次}
+  \tableofcontents[currentsection]
+\end{frame}
+
+\begin{frame}{参考文献}
+  \begin{description}
+    \item[1] Naoto Shiraishi，「An Introduction to Stochastic Thermodynamics from Basic to Advanced」 (Springer)
+    \item[2] 斎藤圭司，「ゆらぐ系の熱力学」（SGCライブラリ）
+    \item[3] 沙川貴大，「非平衡統計力学」（共立出版）
+    \item[4] ランダウ，リフシッツ，「統計物理学」（岩波書店）
+    \item[5] 畠山哲央，姫岡優介，「システム生物学入門」（講談社）
+    \item[6] Hal Tasaki, 「A Modern Introduction to Nonequilibrium Statistical Mechanics」
+    \item[7] 鳥谷部祥一，「生物物理学」（日本評論社）
+  \end{description}
+\end{frame}
+
+\section{Background}
+
+\begin{frame}{目次}
+  \tableofcontents[currentsection]
+\end{frame}
+
+\begin{frame}{Aims of Stochastic Thermodynamics}
+  aaa
+\end{frame}
+
+\begin{frame}{Notation }
+  \begin{description}
+    \item[$\langle A \rangle$] ブラケットは確率変数のアンサンブル平均を表す．
+    \item[$\hat{A}$] ハットをつけた物理量は確率変数を表す．逆に，つけていない物理量はアンサンブル平均をとったものを表す．$A := \langle A \rangle $
+    \item[$\mathcal{A}$] カリグラフィーは時間積分を行ったものを表す．$\mathcal{J} = \int_0^{\tau } dt J(t) $
+  \end{description}
+\end{frame}
+
+\section{Stochastic Processes}
+
+\begin{frame}{目次}
+  \tableofcontents[currentsection]
+\end{frame}
+
+\begin{frame}{Markov Process and Discrete-Time Markov Chein}
+  マルコフ過程とは確率過程のclassのひとつで，粗く述べると，ある時刻のおける系の状態が直前の状態によってのみ決定されるような過程である．
+  簡単のため，ここでは離散時間の場合のみ述べる．\par
+  系の状態が$N$回変化することで，$N+1$つの状態をとることを考える．サイコロであれば，振った回数が$N+1$である．それを時系列に沿って，左からつぎのように並べよう．
+  \begin{equation}
+    (w^0, w^1, \cdots, w^N)
+  \end{equation}
+  なお，慣例に従って，初期状態を$w^0$とし，左から，$i$番目の状態と呼ぶことにする．また，このような数列を trajectory と呼ぶことがある．\par
+  さらに，$N-1$番目から$N$番目の状態への遷移を，$N$番目の遷移と呼ぶことにする．
+\end{frame}
+
+\begin{frame}{Markov Process and Discrete-Time Markov Chein}
+  $n$番目の状態に関する確率分布は，一般に他の状態の影響を受けるため，つぎのように書かれる．
+  \begin{equation}
+    P(w^n | w^{n-1}, w^{n-2}, \cdots, w^0)
+  \end{equation}
+  しかし，ある特別な場合においては
+  \begin{equation}
+    P(w^n | w^{n-1}, w^{n-2}, \cdots, w^0) = P(w^n|w^{n-1})
+  \end{equation}
+  が成り立ち，このような確率過程をマルコフ過程と呼ぶ．\par 
+  特に，離散時間に関するマルコフ過程をマルコフ連鎖（Markov Chein）と呼ぶことがある．
+\end{frame}
+
+\begin{frame}{Markov Process and Discrete-Time Markov Chein}
+  マルコフ連鎖を考え，そのときに実現されうる状態を
+  \begin{equation}
+    w_1, w_2, \cdots, w_M 
+  \end{equation}
+  とラベルしておく．なお，簡単のため
+  \begin{equation}
+    1, 2, \cdots, M 
+  \end{equation}
+  と書くこともある．\par 
+  先ほどの$w$は上付き数字だった $w^n$ のに対し，今回は下付き数字$w_n$であることで区別をすることに注意せよ．サイコロで例えると，前者はサイコロを振る回数であり，後者はサイコロの出る目の数に対応する．
+\end{frame}
+
+\begin{frame}{Markov Process and Discrete-Time Markov Chein}
+  ここで遷移行列（Transition probability matrix）というものを導入する．\par 
+  ある行列$T$がつぎの２つを満たすとき，$T$ を遷移行列（Transition probability matrix）と呼ぶ．
+  \begin{itemize}
+    \item $T_{ij} \geqslant 0$ for all i, j
+    \item 全ての（縦の）列について和をとると１になる．すなわち $\sum_i T_{ij} = 1$
+  \end{itemize}
+  遷移行列の要素 $T_{ij}$ は状態が $j \to i$ になる確率を表す．
+\end{frame}
+
+\begin{frame}{Markov Process and Discrete-Time Markov Chein}
+  ２つの条件は確率分布$\mathbf{p}$をwell-definedにするために必要である．１番目の条件
+  \begin{equation}
+    T_{ij} \geqslant 0 \quad  \text{for all} \  i, j
+  \end{equation}
+  は$p_i$を負にしないために必要である．２番目の条件は，常に $\sum_i p_i = 1$ を保つために必要である．なぜならば
+  \begin{equation}
+    \sum_j p^n_j = \sum_{i, j} T_{ji} p_i^{n-1} = \sum_i p_i^{n-1} \qty( \sum_j T_{ji} )
+  \end{equation}
+  であり，$\sum_j p^n_j = 1$を仮定すれば，２番目の条件が導かれる．
+\end{frame}
+
+\begin{frame}{Markov Process and Discrete-Time Markov Chein}
+  $n$番目の状態に関する確率分布を $\mathbf{p}^n$ とする．マルコフ連鎖において，確率分布の時間発展は，つぎのように与えられる．
+  \begin{equation}
+    p^n_j = \sum_i T_{ji} p^{n-1}_i
+  \end{equation}
+  もちろん次のように書くこともできる．
+  \begin{equation}
+    \mathbf{p}^n = T \mathbf{p}^{n-1}
+  \end{equation}
+\end{frame}
+
+\begin{frame}{Markov Process and Discrete-Time Markov Chein}
+  遷移行列が時間依存する場合もある．その場合は，$n$番目の遷移\footnote{$n-1 \to n$}の遷移行列について
+  \begin{equation}
+    T^n
+  \end{equation}
+  と書くことにする．また，条件付き確率のようにかくこともできる．
+  \begin{equation}
+    T_{ij}^n = P((w_i, n)|(w_j, n-1))
+  \end{equation}
+\end{frame}
+
+\begin{frame}{Continuous Time Markov Jump Process on Discrete System}
+  ここからは離散状態の連続した時間の発展をみる．これを Markov jump process と呼ぶ．当分の間はMarkov jump processを扱う．これは Markov chains では，あまり本質的でない数学的な配慮が必要になるためである．\par 
+  Markov jump process は Markov chains の短時間極限をとることで得られる．なお，よりフォーマルな定式化は後ほど行う．
+\end{frame}
+
+\begin{frame}{Continuous Time Markov Jump Process on Discrete System}
+  時間 $0 \leqslant t \leqslant \tau $ における確率過程を考える．これを時間幅 $\Delta t$ で $N$ 等分する．すなわち $N \Delta t = \tau $となる．このように離散化すれば，Markov chains で扱うことができ，そのときの遷移行列はつぎのようになる．
+  \begin{equation}
+    T_{ij}^n = 
+    \begin{cases}
+      R_{ij}(n \Delta t) \Delta t & i \neq j \\
+      1 - \sum_k R_{kj} (n \Delta t) \Delta t & i = j
+    \end{cases}
+  \end{equation}
+  ただし $R_{ij}(t)$ は実数値関数であり，遷移レート行列と呼ばれる．ここで $N \Delta t = \tau $を保ちながら，$\Delta t \to 0, N \to \infty $ なる極限をとれば，Continuous-time Markov jump Processになる．\par 
+  確率分布の時間発展は，つぎに示す master equationにより与えられる．
+\end{frame}
+
+\begin{frame}{Continuous Time Markov Jump Process on Discrete System}
+  つぎの条件を満たす行列 $R$ を遷移レート行列と呼ぶ．\footnote{略して遷移行列と呼ぶこともあるが，先の$T$と混同するので，普通にやめてほしい．}
+  \begin{itemize}
+    \item $R_{ij} \geqslant 0 \quad i \neq j$
+    \item 全ての（縦の）列について和をとると０になる．すなわち $\sum_i R_{ij} = 0$
+  \end{itemize}
+  遷移行列とは異なり，遷移レート行列の対角成分は正とは限らない．このため列についての和が１ではなく，０になる．\par 
+  この違いは master equation の右辺が確率分布それ自身ではなく，確率分布の時間微分であることによる．
+\end{frame}
+
+\begin{frame}{Continuous Time Markov Jump Process on Discrete System}
+  離散状態に関する連続時間 Markov jump Process を考えたとき，そのときの確率 $p_i(t)$ の時間発展は，つぎの master equation により与えられる．
+  \begin{equation}
+    \frac{d}{dt} p_i (t) = \sum_j R_{ij} (t) p_j (t)
+  \end{equation}
+  ここで $R(t)$ は時刻 $t$ における遷移レート行列である．
+\end{frame}
+
+\begin{frame}{Continuous Time Markov Jump Process on Discrete System}
+  遷移レート行列の非対角成分は，時刻$t$における単位時間当たりの遷移確率に等しい
+  \begin{equation}
+    R_{ji} (t) = P_{i \to j ; t} \quad i \neq j
+  \end{equation}
+  また，対角成分の符号を逆にしたもの $- R_{jj} (t)$ は状態$j$に関する escape rate と呼ばれる．
+\end{frame}
+
+\begin{frame}{Continuous Time Markov Jump Process on Discrete System}
+  状態 $j$の escape rate は 
+  \begin{equation}
+    e_{j, t} := \sum_{i (\neq j)} P_{j \to i ; t}
+  \end{equation}
+  と定義される．$e_{j, t} \cdot \Delta t$ は 時刻$t$ から $t + dt$において，状態 $j$ から別の状態に遷移する確率を表す．\par 
+  また，
+  \begin{equation}
+    R_{jj} := - e_{j, t} 
+  \end{equation}
+  と定義される．\par 
+  escape rate は系が状態 $j$に時刻 $t = 0 \to \tau $で留まり続ける確率を特徴づける．この確率は Staying probabilityと呼ばれる．
+\end{frame}
+
+\begin{frame}{Continuous Time Markov Jump Process on Discrete System}
+  時刻 $t = 0 \to \tau $において状態$j$に留まり続ける Staying probability は，つぎのように表される．
+  \begin{equation}
+    P_{rem}(j; 0, \tau ) = e^{- \int_0^{\tau } e_{j, t} dt}
+  \end{equation}
+  証明は [1] p. 22 にある．
+\end{frame}
+
+\begin{frame}{Convergence Theorem}
+  ここからは $K \times K$ の遷移レート行列$R$を用いて，連続時間マルコフジャンプ過程を考える．ただし，$R$は時間に依存しないものとする．\par
+  そのための準備として，まずは，行列の連結性\footnote{connectivity や irreducible と言ったりする}ついて説明する．
+  \begin{block}{定義：Connectivity}
+    $i \neq j$ なる任意の $i, j = 1, \cdots, K $ に対して，ある正整数 $n$ があり，$n+1$個の数 $i_0, i_1, \cdots, i_n$ がとれて，$i_0 = j, i_n = i$ であり，
+    \begin{equation}
+      K_{i_l, i_{l-1}} \neq 0
+    \end{equation}
+    が $l = 1, 2, \cdots, n$ について成り立つ．
+  \end{block}
+\end{frame}
+
+\begin{frame}{Convergence Theorem}
+  Connectivity を粗く述べると，全ての状態の要素がある経路によって繋ぐことができる行列である．
+  一般に，$i \neq j$ に対して $R_{ij} \neq 0$ であれば，$j \to i$ の直接の繋がりがあるとみなす．\par
+  例えば，つぎの行列は connectivity をもつ．
+  \begin{equation}
+    A = 
+    \begin{pmatrix}
+      7 & 0 & 0 & 3 \\
+      8 &-5 & 0 & 0 \\
+      0 & 4 & 2 & 0 \\
+      0 & 0 & 3 &-4
+    \end{pmatrix}
+  \end{equation}
+  この行列の場合は，非対角成分に注目して，$1 \to 2, 2 \to 3, 3 \to 4, 4 \to 1$ の直接の繋がりがあるとみなせる．\par 
+  例えば，$i = 4, j  =3$ とした場合は，$n  = 1$ で済む．また，$3 \to 2$の直接の繋がりは無いが，$3 \to 4 \to 1 \to 2$ という経路で繋げることができる．
+\end{frame}
+
+\begin{frame}{Convergence Theorem}
+  一方，つぎの行列は Connectivity をもたない．
+  \begin{equation}
+    \begin{pmatrix}
+      4 & 5 & 0 \\
+      2 & -4 & 0 \\
+      3 & 7 & 6
+    \end{pmatrix}
+  \end{equation}
+  例えば，$3 \to 1$ の繋がりは，この行列では作れない．
+\end{frame}
+
+\begin{frame}{Convergence Theorem}
+  行列を，つぎのような図に示すと分かりやすいかもしれない．
+\end{frame}
+
+\begin{frame}{Convergence Theorem}
+  connectivityを仮定すると，つぎのような興味深い定理が導ける．
+  \begin{block}{Existence and uniqueness of stationary distribution}
+    Connectivityをもつ遷移レート行列を考える．このとき，つぎを満たす 正ベクトル \footnote{全ての成分が正のベクトル．positive vectorのこと．} $\mathbf{p}$ が，ただひとつ存在する．
+    \begin{equation}
+      R \mathbf{p} = \mathbf{0}
+    \end{equation}
+    また，この $\mathbf{p}$ を規格化したものを$R$に関する定常状態分布と呼び，$\mathbf{p}^{ss}$ とかくことにする．
+  \end{block}
+  証明はペロン-フロベニウスの定理によってすることもできるが，ここではより初等的な証明を行う．\footnote{[1] p. 24 にある．}
+\end{frame}
+
+\begin{frame}{Convergence Theorem}
+  つぎに，長時間極限をとると，状態は必ず特定の状態に収束することを示す．簡単のため，ここに限っては Discrete time Markov chain によって説明する．\par 
+  まずは strong connectivity を導入する．
+  \begin{block}{定義：strong connectivity}
+    非負行列\footnote{全ての成分が負ではない行列のこと．} $T$ において，つぎを満たす，ある正の整数 $m$が存在すること．
+    \begin{equation}
+      ((T)^m)_{i, j} > 0 \quad \text{ for all } i, j
+    \end{equation}
+  \end{block}
+  $m$ 番目の遷移行列 $T^m$ と区別するために，あえて$(T)^m$と書いている．
+\end{frame}
+
+\begin{frame}{Convergence Theorem}
+  \begin{block}{Convergence theorem (discrete time Markov chain)}
+    strong connectivity をもち，サイズが $K$ の遷移行列 $T$ を考える．
+    任意の（初期）確率分布 $\mathbf{p}^0$に対して，$n$番目の確率分布を，$\mathbf{p}^n := T^n \mathbf{p}^0 $と定めたとき，
+    \begin{equation}
+      \lim_{n \to \infty } \mathbf{p}^n = \mathbf{p}^ss
+    \end{equation}
+    が成り立つ．
+  \end{block}
+\end{frame}
+
+\begin{frame}{Convergence Theorem}
+  実は，Continuous time Markov jump Process の場合は，条件が弱くなる．
+  \begin{block}{Convergence theorem (Continuous time Markov jump)}
+    connectivity をもち，サイズが $K$ の遷移レート行列 $R$ を考える．
+    任意の（初期）確率分布 $\mathbf{p} (0)$に対して，時刻$t$の確率分布を，$\mathbf{p} (t) := e^{Rt} \mathbf{p} (0) $と定めたとき，
+    \begin{equation}
+      \lim_{t \to \infty } \mathbf{p} (t) = \mathbf{p}^ss
+    \end{equation}
+    が成り立つ．
+  \end{block}
+  いずれの場合の証明は [1] p. 26にある．
+\end{frame}
+
+\begin{frame}{Formal Introduction of Markov Process}
+  ここからは Markov Process と Markov jump process をフォーマルに，数学の手続きに従って導入する．
+\end{frame}
+
+\section{Stochastic Thermodynamics}
+
+\begin{frame}{目次}
+  \tableofcontents[currentsection]
+\end{frame}
+
+\begin{frame}{stochastic entropy}
+  $M$個の事象$x_1, x_2, \cdots, x_M$がランダムに起こる場合を考え，そのそれぞれが起こる確率を $P(x_j)$とする$(j = 1, 2, \cdots, M )$．
+  ここで stochastic entropy というものを，つぎのように定義する．
+  \begin{equation}
+    s(x_i ) := - \ln P(x_i) \quad for \ i = 1, 2, \cdots, M 
+  \end{equation}
+  この量は surprisal とも呼ばれ，$x_i$が常に起こるとき，すなわち $P(x_i) = 1$のときは$0$をとる．逆に$x_i$が起こりにくいとき，すなわち$P(x_i) \ll  1$のとき，大きい値をとる．
+\end{frame}
+
+\begin{frame}{stochastic entropy}
+  $f(p)$ を，ある事象の確率$p$についての関数だとする．
+  このとき，つぎの２つの性質を満たす関数 $f$ は一意であり，それは stochastic entropy に定数倍の違いを除いて一致する．
+  \begin{itemize}
+    \item $f$が$p$についての連続関数
+    \item $f$が加法性をもつ；$f(pq) = f(p) + f(q)$
+  \end{itemize}
+  証明は[1] p. 32 にある．
+\end{frame}
+
+\begin{frame}{Shannon Entropy}
+  stochastic entropy を用いて Shannon entropy を定義する．
+  なお簡単のため $P(x_i)$ を $p_i$ と表記する．
+  \begin{equation}
+    H(x) = - \sum_j p_j \ln p_j 
+  \end{equation}
+  Shannon entropyは事象の予測しにくさを表す．例えばコイントスを考えると，Shannon entropyは 
+  \begin{equation}
+    H(x) = \frac{1}{2} \ln 2 + \frac{1}{2} \ln 2 \fallingdotseq 0.69
+  \end{equation}
+  対して，確率 $\frac{1}{3}$と$\frac{2}{3}$ のときは，先ほどよりも予測しやすくなっており，Shannon entropyは 
+  \begin{equation}
+    \frac{1}{3} \ln 3 + \frac{2}{3} \ln \frac{3}{2} \fallingdotseq 0.64
+  \end{equation}
+  小さくなっている．
+\end{frame}
+
+\begin{frame}{Shannon Entropy}
+  ２事象系を考え，それらが起こる確率を$p, 1-p$としよう．
+  このときの Shannon entropy は 
+  \begin{equation}
+    H(p) = -p \ln p - (1-p) \ln (1-p) 
+  \end{equation}
+  となり，これは$p=\frac{1}{2}$のときに最大値をとる．
+  一般に Shannon entropyは，全ての事象が起こる確率が等しいときに最大値をとる．
+\end{frame}
+
+\begin{frame}{Shannon Entropy}
+  k
+\end{frame}
+
+\begin{frame}{Shannon Entropy}
+  最後に条件付きシャノンエントロピーというものを導入する．
+  \begin{block}{定義：Conditional Shannon entropy}
+    $y$という状態の下での$x$のシャノンエントロピーは
+    \begin{equation}
+      H(x|y) := - \sum_{i, j} P(x_i, y_j) \ln P(x_i|y_j)
+    \end{equation}
+    ここで$P(x_i|y_j)$は$y_j$の下での$x_i$が起こる条件付き確率である．
+  \end{block}
+\end{frame}
+
+\begin{frame}{Shannon Entropy}
+  後々で必要になる定理を紹介する．
+  \begin{block}{Monotonicity of Shannon entropy by conditionalization}
+    任意の確率変数 $X, Y$に対して
+    \begin{equation}
+      H(X|Y) \leqslant  H(X)
+    \end{equation}
+    が成り立つ．
+  \end{block}
+\end{frame}
+
+\begin{frame}{Time-reversal symmetry of equilibrium states}
+  ここでは時間反転に関する用語を整理する．
+  \begin{description}
+    \item[奇パリティ（parity-odd）] 時間反転操作により符号が逆になる（ex. 運動量）
+    \item[偶パリティ（parity-even）] 時間反転操作により符号が不変（ex. 位置）
+  \end{description}
+\end{frame}
+
+\begin{frame}{Time-reversal symmetry of equilibrium states}
+  ここでは変数$w$に対して，時間反転操作を行った場合は$\bar{w}$と書くことにする．例えば系の状態を
+  \begin{equation}
+    w = (x, p)
+  \end{equation}
+  と表したとき，時間反転操作を行ったものは
+  \begin{equation}
+    \bar{w} = (x, -p)
+  \end{equation}
+  となる．
+\end{frame}
+
+\begin{frame}{Time-reversal symmetry of equilibrium states}
+  遷移行列や，経路確率について時間反転を行った場合は，$\dagger $をつける．また，経路に依存する物理量に対して，時間反転した経路を考えた場合にも $\dagger $をつける．
+  \begin{equation}
+    R^{\dagger }, \quad A^{\dagger }
+  \end{equation}
+\end{frame}
+
+\begin{frame}{Time-reversal symmetry of equilibrium states}
+  平衡状態では，その時間発展を通して状態を変化させない．
+  このことから平衡状態では，特定の時間方向性がないことが想像できる．すなわち，ある時間発展の経路と，それを時間反転させた経路は等確率で起こるように思われる．これを正しく表現し，ここからの理論では要請する．\par 
+  時間発展 $w_0 \to w_1$ が存在する時，それを時間反転させた時間発展 $\bar{w}_1 \to \bar{w}_0$ は必ず存在する．さらに，ミクロカノニカル分布においては等重率の原理により，２つの状態が現れる確率は等しいことが保証されている．
+  \begin{equation}
+    P_{eq} (w_0) = P_{eq} (w_1)
+  \end{equation}
+  以上をまとめると，２つの経路が実現する確率は等しいことが分かる．換言すれば，平衡な系のダイナミックのスナップショットをとった時，その系が前進しているのか，逆に進んでいるのかは区別できないということになる．
+\end{frame}
+
+\begin{frame}{Time-reversal symmetry of equilibrium states}
+  以上の考えを確率過程においても要請しよう．
+  \footnote{物理系における確率過程が，ミクロな決定論的プロセスによって生み出されることを仮定すれば，先の考えは確率過程においても有効である．だが，この仮定は量子系（特に測定を行う場合）においては正しくないことに注意せよ．}
+  \begin{block}{Time-reversal symmetry of equilibrium states}
+    平衡な系において，任意の $w, w'$ についての遷移 $w \to w'$ と，その時間反転されたものは同じ確率で起こる．
+    \begin{equation}
+      p_w^{eq} P_{w \to w'} = p_{\bar{w}'}^{eq} P_{\bar{w}' \to \bar{w}}^{\dagger}
+    \end{equation}
+    ここで$p^{eq}$は平衡分布．
+  \end{block}
+\end{frame}
+
+\begin{frame}{Time-reversal symmetry of equilibrium states}
+  escape rate や エネルギーについても同様のことが成り立つ．
+  \begin{equation}
+    e_{w, t} = e_{\bar{w}, t}^{\dagger}
+  \end{equation}
+  \begin{equation}
+    E_w = E_{\bar{w}} = E^{\dagger}
+  \end{equation}
+\end{frame}
+
+\begin{frame}{Heat in Discrete-State Systems and Detailed-Balance Condition}
+  まずは熱浴が１つかつ，状態が離散的な場合を考える．\par 
+  時間反転の写像 $w \mapsto \bar{w}$ と，時間反転させた遷移レート行列 $R^{\dagger }$が適切に定義されるとき，熱の定義はつぎのようになる．
+  \begin{block}{Heat in stochastic processes}
+    ある熱浴（逆温度 $\beta $ ）によって状態が$w \to w'$に遷移したとき，系から熱浴へ移動した熱の量は，つぎのように定義される．
+    \begin{equation}
+      Q_{w \to w'} := E_w - E_{w'} = \frac{1}{\beta } \ln \frac{P_{w \to w'}}{P_{\bar{w}' \to \bar{w}}^{\dagger }}
+    \end{equation}
+  \end{block}
+  Stochastic Thermodynamics ではしばしば逆温度 $\beta = \frac{1}{T}$ を用いる．このときボルツマン定数は１に規格化していることに注意せよ．
+\end{frame}
+
+\begin{frame}{Heat in Discrete-State Systems and Detailed-Balance Condition}
+  熱浴が１つしかなく，奇パリティ変数はないものとする．このとき，平衡状態に関する要請\footnote{先のセクションで示したもの}により，つぎの Detailed-Balance Condition が導ける．\footnote{書籍によって詳細つり合い，局所詳細つり合いの意味合いが微妙に違うことがあるが，ここでは示した意味でのみ用いる．}
+  \begin{block}{Detailed-Balance Condition}
+    遷移レート行列がつぎの関係を満たしている場合，詳細つり合い（Detailed-Balance Condition）を満たしているという．
+    \begin{equation}
+      p_w^{ss} P_{w \to w'} = p_{w'}^{ss} P_{w' \to w} \quad \text{for all} \quad w, w'
+    \end{equation}
+    ただし，$p_w^{ss}$ は状態 $w$ における定常状態である．
+  \end{block}
+\end{frame}
+
+\begin{frame}{Heat in Discrete-State Systems and Detailed-Balance Condition}
+  次に熱浴が複数ある場合を考える．各熱浴の温度に対応して遷移が起こるとき，Local detailed-balance conditionを満たすという．
+  \begin{block}{Local Detailed-Balance Condition}
+    任意の熱浴 $\nu $ （逆温度$\beta_{_nu}$）と，熱浴$\nu $によって引き起こされた任意の遷移$w \to w'$について，つぎの関係を満たしている場合，系が詳細つり合い（Detailed-Balance Condition）を満たしているという．
+    \begin{equation}
+      E_w - E_{w'} = \frac{1}{\beta_{_nu }} \ln \frac{P_{w \to w'}^{\nu }}{P_{w' \to w}^{\nu }}
+    \end{equation}
+  \end{block}
+\end{frame}
+
+\begin{frame}{Heat in Discrete-State Systems and Detailed-Balance Condition}
+  系に対して時間依存するパラメータがある場合，その変化により仕事が発生すると考える．ここでは $E_w^{\lambda }$ がパラメータ$\lambda $を備えた状態$w$のエネルギーであることにする．
+  \begin{block}{Work in stochastic processes in discrete states}
+    系が状態 $w$ にあるとする．このとき単位時間あたりに取り出せる仕事量はつぎのように定義される．\footnote{$\dot{A}$は時間微分の意味，$\hat{A}$は確率変数の意味であった．}
+    \begin{equation}
+      \hat{\dot{W}} = - \frac{d E_w^{\lambda(t)}}{d \lambda} \frac{d \lambda(t)}{dt}
+    \end{equation}
+  \end{block}
+\end{frame}
+
+\begin{frame}{Heat in Discrete-State Systems and Detailed-Balance Condition}
+  この定義より，単位時間に平均して取り出せる仕事は
+  \begin{equation}
+    \dot{W} = - \sum_w \frac{d E_w^{\lambda(t)}}{d \lambda} \frac{d \lambda(t)}{dt} p_w (t)
+  \end{equation}
+  となる．
+\end{frame}
+
+\begin{frame}{Entropy Production}
+  Entropy Production(エントロピー生成) $\sigma $は注目系と熱浴におけるエントロピー変化の和として定義され，これは経路の不可逆性を定量的に示す．\par 
+  $k$個の熱浴を用意し，そのそれぞれの熱浴の逆温度を$\beta_1, \beta_2, \cdots, \beta_k$とする．
+  系を時刻$0 \leqslant t \leqslant  \tau $において熱浴を接し，そのときの (average) entropy production はつぎのように定義される．
+  \begin{equation}
+    \sigma := \sum_{\nu=1}^k \beta_{\nu } Q_{\nu } + H(\mathbf{p}(\tau )) - H(\mathbf{p}(0))
+  \end{equation}
+  ここで $Q_{\nu }$は $\nu $番目の熱浴から系に流入した熱の平均で，$H(\cdot )$は Shannon entropy ，$\mathbf{p}(\cdot )$は確率分布である．
+\end{frame}
+
+\begin{frame}{Entropy Production}
+  \begin{equation}
+    \sigma := \sum_{\nu=1}^k \beta_{\nu } Q_{\nu } + H(\mathbf{p}(\tau )) - H(\mathbf{p}(0))
+  \end{equation}
+  第１項は熱浴のエントロピー増加を表し，第２，３項は系のエントロピー増加を表す．
+\end{frame}
+
+\begin{frame}{Entropy Production}
+  つぎに１つの経路に対して熱力学量を定義することを考える．
+  エネルギー変化や熱の流入に関しては，１つの経路に対して定義することができる．
+  しかし，シャノンエントロピーはアンサンブル平均に対して定義されるため，１つの経路に対して定義ができない．
+  そのため１つの経路に対してエントロピーを定めるには，stochastic entropy を用いる．
+  \begin{equation}
+    \hat{\sigma } := \sum_{\nu=1}^k \beta_{\nu } \hat{Q_{\nu }} + \hat{s} (w(\tau ); \tau ) - \hat{s} (w(0 ); 0)
+  \end{equation}
+\end{frame}
+
+\begin{frame}{Entropy Production}
+  エントロピー生成率 $\dot{\sigma }$ は，計算するとつぎのようになる．
+  \begin{equation}
+    \dot{\sigma } = \sum_{w, w'} p_w P_{w \to w'} \ln \frac{p_w P_{w \to w'}}{p_{w'} P^{\dagger }_{\bar{w}' \to \bar{w}}}
+  \end{equation}
+\end{frame}
+
+\begin{frame}{Differences Between Conventional Thermodynamics and Stochastic Thermodynamics}
+  Stochastic Thermodynamics で必要な物理量の紹介が終わったため，ここではマクロな系を対象とする（いわゆる普通の）熱力学と，Stochastic Thermodynamics の違いを説明する．
+\end{frame}
+
+\begin{frame}{Conventional Thermodynamics}
+  まずはマクロな熱力学について要約する．
+  \begin{description}
+    \item[観測量] マクロな観測量に限る．系の体積を $V$ としたとき，全ての観測量は $o(V)$ のゆらぎをもつ．
+    \item[状態] 系の状態はマクロな観測量の値によって指定される．マクロ変数の値の違いが $o(V)$ しかない２つの状態は同じ状態だとみなし，さらに同じ熱力学関係を結ぶ．
+    \item[操作] 沢山の流儀があるが，ひとつは系の外部からゆらぎを無しにして，系に操作するというもの．
+    \item[仕事] マクロな変数の変化を通じた力学的な仕事によって定義された操作を通して，取り出せる仕事が定義される．
+    \item[熱] 内部エネルギーと仕事によって定義される．$Q := -W - \Delta U$ 
+  \end{description}
+  最も重要なことは，熱力学量の$o(V)$の違いは無視されることである．
+\end{frame}
+
+\begin{frame}{Stochastic Thermodynamics}
+  \begin{description}
+    \item[観測量] 観測量はミクロなものも含まれる．体積 $V$ の意味で$O(1)$の違いを無視せずに考える．
+    \item[状態] 可能な微視的状態に対する確率分布が状態とみなされる．
+    \item[操作] 外部から任意の微視的操作を，系に対して，行うことができる．
+    \item[仕事] 操作パラメーターに対して行われた機械的仕事として定義される．
+    \item[熱] 内部エネルギーと仕事によって定義される． 
+  \end{description}
+  マクロな熱力学との違いは，$O(1)$の量が検出できることである．
+\end{frame}
+
+\begin{frame}{Differences Between Conventional Thermodynamics and Stochastic Thermodynamics}
+  Stochastic Thermodynamics ではエントロピーをシャノンエントロピーとして定義する．シャノンエントロピーは任意の準静的過程で増加することはないため，熱力学エントロピーとしての定義は一見，不自然だと思われる．なぜならば，マクロな熱力学において，そのような過程ではエントロピーは増加するためである．\par 
+  ここでは，Stochastic Thermodynamics においてシャノンエントロピーが良い定義であることを議論する．
+\end{frame}
+
+\begin{frame}{Differences Between Conventional Thermodynamics and Stochastic Thermodynamics}
+  熱力学における不可逆性は，可能な操作に対する制限によって生まれる．まずは簡単のために逆を考えよう．\par 
+  もし外部からミクロなレベルで操作を行うことができれば，Hamilton方程式は可逆であるため，不可逆な過程は存在しないことになる．しかし，実際にはそのようなことはできず，この制限が不可逆性をもたらし，我々は許された操作の集合内でしか操作を行うことができない．
+  状態の変化 $X \to Y$ が，この操作の集合内で可能であっても，その逆 $Y \to X$ は不可能であるかもしれない．\par 
+  しかし，Stochastic Thermodynamics においては，許された操作の集合は，システムに対する任意の操作であり，熱浴に対する操作ではない．この操作にはミクロなレベルのものも入っている．Stochastic Thermodynamicsにて，不可逆性は熱浴を制御できないことから生じる．
+\end{frame}
+
+\begin{frame}{Differences Between Conventional Thermodynamics and Stochastic Thermodynamics}
+  さて，エントロピーの問題に戻る．マクロな熱力学では，断熱過程では一般に不可逆であり，エントロピーは増加する．これに対し，Stochastic Thermodynamicsでは，系に対して任意の操作を行うことができるため，すべての断熱過程は許された操作の集合内で可逆である．すなわちエントロピーは不変であり，これがシャノンエントロピーが良い定義となる理由である．
+\end{frame}
+
+\begin{frame}{Reversible Adiabatic Processes}
+  小さな系に対する Stochastic Thermodynamics では，マクロな熱力学では不要だった注意が必要になる．
+  マクロな熱力学では準静的断熱過程において終状態の温度が正しく定義できる．
+  これに対し Stochastic Thermodynamics では，Liouville の定理より，たとえ準静的な断熱過程であっても，終状態は一般にカノニカル分布にならない．\par 
+  初期分布が逆温度 $\beta $ をもつカノニカル分布だとする．ここで制御パラメーターを $\lambda(0) \to \lambda(\tau )$ に変化させることで，状態を $w(0) \to w(\tau )$ へ変化させる．これを
+  \begin{equation}
+    w (\tau) = M(w(0))
+  \end{equation}
+  と表す．制御パラメーターが $\lambda$ で，状態が $w$ であるときのエネルギーを $E_w^{\lambda }$ とすると，初期分布はつぎのようになる．
+  \begin{equation}
+    P(w; 0) = \frac{e^{- \beta E_w^{\lambda(0)}}}{Z^{\beta, \lambda(0)}}
+  \end{equation}
+\end{frame}
+
+\begin{frame}{Reversible Adiabatic Processes}
+  Liouville の定理より，終状態の分布は
+  \begin{equation}
+    P(M(w(0)); \tau ) = \frac{e^{- \beta E_w^{\lambda(0)}}}{Z^{\beta, \lambda(0)}}
+  \end{equation}
+  ???
+\end{frame}
+
+\begin{frame}{How to Derive Results for Macroscopic Systems from Stochastic Thermodynamics}
+  以上，マクロな熱力学との違いを見たが，このような違いはどのように整合するのかをみる．\par 
+  我々は Stochastic Thermodynamics にて得られた関係は，熱力学極限において意味を持つと考える．
+  ???
+\end{frame}
+
+\section{Stochastic Processes in Continuous Space}
+
+\begin{frame}{目次}
+  \tableofcontents[currentsection]
+\end{frame}
+
+
+
+\end{document}
